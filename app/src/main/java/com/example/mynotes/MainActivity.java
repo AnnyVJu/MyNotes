@@ -23,5 +23,6 @@ public class MainActivity extends AppCompatActivity {
         notes.add(new Note("Магазин", "Купить крепеж", "Суббота", 2));
         notes.add(new Note("Дом", "Прибраться в шкафу", "Воскресенье", 3));
         notes.add(new Note("Дом", "Помыть окна", "Вторник", 3));
+        NotesAdapter adapter = new NotesAdapter(notes);
     }
 }
