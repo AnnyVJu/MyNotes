@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         notes.add(new Note("Дом", "Прибраться в шкафу", "Воскресенье", 3));
         notes.add(new Note("Дом", "Помыть окна", "Вторник", 3));
         NotesAdapter adapter = new NotesAdapter(notes);
-        recyclerViewNotes.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerViewNotes.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotes.setAdapter(adapter);
     }
 }
