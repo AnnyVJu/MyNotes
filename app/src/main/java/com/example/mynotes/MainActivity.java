@@ -5,14 +5,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewNotes;
-    private ArrayList<Note> notes = new ArrayList<>();
+    public static final ArrayList<Note> notes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +30,10 @@ public class MainActivity extends AppCompatActivity {
         NotesAdapter adapter = new NotesAdapter(notes);
         recyclerViewNotes.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotes.setAdapter(adapter);
+    }
+
+    public void onClickAddNote(View view) {
+        Intent intent = new Intent(this, AddNoteActivity.class);
+        startActivity(intent);
     }
 }
