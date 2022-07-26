@@ -18,8 +18,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     public NotesAdapter(ArrayList<Note> notes) {
         this.notes = notes;
     }
+
     interface OnNoteClickListener {
         void onNoteClick(int position);
+        void onLongClick(int position);
     }
 
     public void setOnNoteClickListener(OnNoteClickListener onNoteClickListener) {
@@ -78,7 +80,15 @@ switch (priority) {
                     }
                 }
             });
-
+itemView.setOnLongClickListener(new View.OnLongClickListener() {
+    @Override
+    public boolean onLongClick(View view) {
+        if (onNoteClickListener !=null) {
+            onNoteClickListener.onLongClick(getAdapterPosition());
+        }
+        return true;
+    }
+});
         }
     }
 }
