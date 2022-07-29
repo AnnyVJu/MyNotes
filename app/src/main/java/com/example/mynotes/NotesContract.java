@@ -13,7 +13,7 @@ public class NotesContract {
         public static final String TYPE_TEXT = "TEXT";
         public static final String TYPE_INTEGER = "INTEGER";
 
-        public static final String CREATE_COMMAND = "CREATE TABLE IF NOT EXISTS" + TABLE_NAME + "("
+        public static final String CREATE_COMMAND = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + _ID + " " + TYPE_INTEGER + " PRIMARY KEY AUTOINCREMENT, " + COLUMN_TITLE + " "
                 + TYPE_TEXT + ", " + COLUMN_DESCRIPTION + " " + TYPE_TEXT + ", " + COLUMN_DAY_OF_WEEK
                 + " " + TYPE_TEXT + ", " + COLUMN_PRIORITY + " " + TYPE_INTEGER + ")";
