@@ -1,5 +1,6 @@
 package com.example.mynotes;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -27,6 +28,10 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar !=null) {
+            actionBar.hide();
+        }
         dbHelper = new NotesDBHelper(this);
         database = dbHelper.getWritableDatabase();
         editTextTitle = findViewById(R.id.editTextTitle);
