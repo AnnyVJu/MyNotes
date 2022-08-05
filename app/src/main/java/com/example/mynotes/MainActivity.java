@@ -1,13 +1,18 @@
 package com.example.mynotes;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,22 +22,24 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewNotes;
-    public static final ArrayList<Note> notes = new ArrayList<>();
+    private final ArrayList<Note> notes = new ArrayList<>();
     private NotesAdapter adapter;
+    private NotesDBHelper dbHelper;
+    private SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerViewNotes = findViewById(R.id.recyclerViewNotes);
-        if (notes.isEmpty()) {
-            notes.add(new Note("Ортодонт", "Запись к стоматологу", "Вторник", 1));
-            notes.add(new Note("Врач", "Запись в поликлинику", "Вторник", 1));
-            notes.add(new Note("Магазин", "Купить салфетки", "Суббота", 2));
-            notes.add(new Note("Магазин", "Купить крепеж", "Суббота", 2));
-            notes.add(new Note("Дом", "Прибраться в шкафу", "Воскресенье", 3));
-            notes.add(new Note("Дом", "Помыть окна", "Вторник", 3));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar !=null) {
+            actionBar.hide();
         }
+        recyclerViewNotes = findViewById(R.id.recyclerViewNotes);
+        dbHelper = new NotesDBHelper(this);
+        database = dbHelper.getWritableDatabase();
+        database.delete(NotesContract.NotesEntry.TABLE_NAME, null, null);
+        getData();
         adapter = new NotesAdapter(notes);
         recyclerViewNotes.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotes.setAdapter(adapter);
@@ -62,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void remove(int position) {
-        notes.remove(position);
+        int id = notes.get(position).getId();
+        String where = NotesContract.NotesEntry._ID + " = ?";
+        String[] whereArgs = new String[]{Integer.toString(id)};
+        database.delete(NotesContract.NotesEntry.TABLE_NAME, where, whereArgs);
+        getData();
         adapter.notifyDataSetChanged();
     }
 
@@ -70,5 +81,20 @@ public class MainActivity extends AppCompatActivity {
     public void onClickAddNote(View view) {
         Intent intent = new Intent(this, AddNoteActivity.class);
         startActivity(intent);
+    }
+
+    private void getData() {
+        notes.clear();
+        Cursor cursor = database.query(false, NotesContract.NotesEntry.TABLE_NAME, null, null, null, null, null, NotesContract.NotesEntry.COLUMN_PRIORITY, null, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(NotesContract.NotesEntry._ID));
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(NotesContract.NotesEntry.COLUMN_TITLE));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow(NotesContract.NotesEntry.COLUMN_DESCRIPTION));
+            String dayOfWeek = cursor.getString(cursor.getColumnIndexOrThrow(NotesContract.NotesEntry.COLUMN_DAY_OF_WEEK));
+            int priority = cursor.getInt(cursor.getColumnIndexOrThrow(NotesContract.NotesEntry.COLUMN_PRIORITY));
+            Note note = new Note(id, title, description, dayOfWeek, priority);
+            notes.add(note);
+        }
+        cursor.close();
     }
 }

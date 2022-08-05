@@ -5,8 +5,10 @@ public class Note {
     private String description;
     private String dayOfWeek;
     private int priority;
+    private int id;
 
-    public Note(String title, String description, String dayOfWeek, int priority) {
+    public Note(int id, String title, String description, String dayOfWeek, int priority) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.dayOfWeek = dayOfWeek;
@@ -15,6 +17,9 @@ public class Note {
 
     public String getTitle() {
         return title;
+    }
+    public int getId() {
+        return id;
     }
 
     public String getDescription() {
