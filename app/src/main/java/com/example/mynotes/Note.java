@@ -1,8 +1,9 @@
 package com.example.mynotes;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "notes")
 public class Note {
