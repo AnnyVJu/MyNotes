@@ -1,18 +1,17 @@
 package com.example.mynotes;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
-    private ArrayList<Note> notes;
+    private List<Note> notes;
     private OnNoteClickListener onNoteClickListener;
 
     public NotesAdapter(ArrayList<Note> notes) {
@@ -28,19 +27,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         this.onNoteClickListener = onNoteClickListener;
     }
 
-    @NonNull
     @Override
-    public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public NotesViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.note_item, viewGroup, false);
         return new NotesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotesViewHolder notesViewHolder, int i) {
+    public void onBindViewHolder(NotesViewHolder notesViewHolder, int i) {
 Note note = notes.get(i);
 notesViewHolder.textViewTitle.setText(note.getTitle());
 notesViewHolder.textViewDescription.setText(note.getDescription());
-notesViewHolder.textViewDayOfWeek.setText(note.getDayOfWeek());
+notesViewHolder.textViewDayOfWeek.setText(note.getDayOfWeek() + 1);
 int colorId;
 int priority = note.getPriority();
 switch (priority) {
@@ -67,7 +65,7 @@ switch (priority) {
         private TextView textViewDescription;
         private TextView textViewDayOfWeek;
 
-        public NotesViewHolder(@NonNull View itemView) {
+        public NotesViewHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
@@ -90,5 +88,14 @@ itemView.setOnLongClickListener(new View.OnLongClickListener() {
     }
 });
         }
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+        notifyDataSetChanged();
+    }
+
+    public List<Note> getNotes() {
+        return notes;
     }
 }
